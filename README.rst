@@ -9,7 +9,7 @@
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
 
-Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
+Async Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
 v2.0 API.
 
 Usage
@@ -23,7 +23,7 @@ Wolfram Alpha)::
 
 Then, you can send queries, which return Result objects::
 
-    res = client.query('temperature in Washington, DC on October 3, 2012')
+    res = await client.query('temperature in Washington, DC on October 3, 2012')
 
 Result objects have `pods` (a Pod is an answer group from Wolfram Alpha)::
 

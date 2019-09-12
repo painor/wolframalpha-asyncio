@@ -1,27 +1,27 @@
 import itertools
 import json
-
-from six.moves import urllib, map
+import aiohttp
 
 import xmltodict
-from jaraco.itertools import always_iterable
-
-from . import compat
-
-compat.fix_HTTPMessage()
 
 
-class Client(object):
+
+
+
+class Client:
     """
     Wolfram|Alpha v2.0 client
 
     Pass an ID to the object upon instantiation, then
     query Wolfram Alpha using the query method.
     """
+
     def __init__(self, app_id):
         self.app_id = app_id
+        self.session = aiohttp.ClientSession()
+        self.url = "https://api.wolframalpha.com/v2/query"
 
-    def query(self, input, params=(), **kwargs):
+    async def query(self, input, params=(), **kwargs):
         """
         Query Wolfram|Alpha using the v2.0 API
 
@@ -48,15 +48,18 @@ class Client(object):
         )
         data = itertools.chain(params, data.items(), kwargs.items())
 
-        query = urllib.parse.urlencode(tuple(data))
-        url = 'https://api.wolframalpha.com/v2/query?' + query
-        resp = urllib.request.urlopen(url)
-        assert resp.headers.get_content_type() == 'text/xml'
-        assert resp.headers.get_param('charset') == 'utf-8'
-        return Result(resp)
+        query = tuple(data)
+
+        resp = await self.session.get(self.url, params=query)
+        assert resp.headers["Content-Type"] == 'text/xml;charset=utf-8'
+        return Result(await resp.text("utf-8"))
+
+    def __del__(self):
+        self.session._loop.create_task(self.session.close())
+        self.session.connector._closed = True
 
 
-class ErrorHandler(object):
+class ErrorHandler:
     def __init__(self, *args, **kwargs):
         super(ErrorHandler, self).__init__(*args, **kwargs)
         self._handle_error()
@@ -79,7 +82,7 @@ class Document(dict):
         Load instances from the xmltodict result. Always return
         an iterable, even if the result is a singleton.
         """
-        return map(cls, always_iterable(doc))
+        return map(cls, list(doc))
 
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
@@ -211,7 +214,7 @@ class Result(ErrorHandler, Document):
             pod
             for pod in self.pods
             if pod.primary
-            or pod.title == 'Result'
+               or pod.title == 'Result'
         )
 
     @property
