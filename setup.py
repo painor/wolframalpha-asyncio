@@ -19,7 +19,7 @@ pkg_resources "managed" namespace packages?
 
 params = dict(
 	name=name,
-	version="4.0",
+	version="4.0.1",
 	author="Painor",
 	author_email="topcode.softwares@gmail.com",
 	description=description or name,
