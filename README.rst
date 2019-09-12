@@ -1,10 +1,7 @@
-.. image:: https://img.shields.io/pypi/v/wolframalpha.svg
-   :target: https://pypi.org/project/wolframalpha
+.. image:: https://img.shields.io/pypi/v/wolframalpha-asyncio.svg
+   :target: https://pypi.org/project/wolframalpha-asyncio
 
-.. image:: https://img.shields.io/pypi/pyversions/wolframalpha.svg
-
-.. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
-   :target: https://travis-ci.org/jaraco/wolframalpha
+.. image:: https://img.shields.io/pypi/pyversions/wolframalpha-asyncio.svg
 
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
